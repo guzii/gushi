@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "标签";
+    Layout = "~/Areas/MasterManage/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        if (!!keyValue) {
+            $.ajax({
+                url: "/ArticleManage/Tags/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/ArticleManage/Tags/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                top.Tags.$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">标签名称</th>
+                <td class="formValue">
+                    <input id="F_Title" name="F_Title" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序</th>
+                <td class="formValue">
+                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" value="99" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">选项</th>
+                <td class="formValue" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="F_Recommend" name="F_Recommend" type="checkbox" checked="checked"><label for="F_Recommend">推荐显示</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

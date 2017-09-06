@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@using NFine.Domain.Entity.SystemManage;
+@* 内容页面 *@
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-md5">
+            <div class="layui-panal-nopadding">
+                <div class="layui-carousel" id="carousel">
+                    <div carousel-item="">
+                        <div>条目1</div>
+                        <div>条目2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md7">
+            <div class="layui-panal">
+                <div class="layui-panal-title layui-panal-title-noborderbottom">
+                    <span>推荐阅读</span>
+                </div>
+                <div class="layui-panal-content">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6">2222</div>
+                        <div class="layui-col-md6">3333</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-container">
+    <div class="layui-row  layui-col-space20">
+        <div class="layui-col-md8">
+            <div class="layui-panal">
+                <div class="layui-panal-title">
+                    <span>最近更新</span>
+                </div>
+                <div class="layui-panal-content">
+                    <div class="layui-row layui-col-space10" id="Newest">
+
+                    </div>
+                    <div id="NewestPage"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-panal">
+                <div class="layui-panal-title">
+                    <span>热门排行</span>
+                </div>
+                <div class="layui-panal-content">
+                    <ul class="hotUl">
+                        @{
+                            var HotArticle = ViewBag.HotArticle as List<ArticleEntity>;
+                            var Num = 1;
+                            foreach (var item in HotArticle)
+                            {
+                                var classHot = "";
+                                if (item.F_Ishot == true) { classHot = "layui-red"; }
+                                <li>
+                                    <em>@Num</em>
+                                    <a class="@classHot"
+                                       href="@Url.Action("index", "Articles",
+                                                            new {id=item.F_EnCode})">@item.F_Title</a>
+                                                        </li>
+                                Num++;
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--分类-->
+
+<div class="layui-container">
+    <div class="layui-row  layui-col-space20">
+        @{
+            var navRecommendGushiClass = ViewBag.RecommendGushi as List<NavigationEntity>;
+            foreach (var item in navRecommendGushiClass)
+            {
+                <div class="layui-col-md6">
+                    <div class="layui-panal">
+                        <div class="layui-panal-title">
+                            <span>@item.F_Name</span>
+                            <span class="layui-breadcrumb" lay-separator="/">
+                                @foreach (var subitem in item.ChildNavigationList)
+                                {
+                                    <a href="@Url.Action("index", "Navigation", new {id=subitem.F_EnCode})">@subitem.F_Name</a>
+                                }
+                                <a class="place-right"
+                                   href="@Url.Action("index", "Navigation",
+                                        new { id = item.F_EnCode })">更多</a>
+                            </span>
+                        </div>
+                        <div class="layui-panal-content">
+                            <ul>
+                                @{ foreach (var subitem in item.ChildArticleList)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "Navigation", new {id=subitem.NavEntity.F_EnCode})">@subitem.NavEntity.F_Name</a>
+                                            <span>
+                                                @Html.Label(((DateTime)subitem.F_CreatorTime).ToString("dd日"))
+                                            </span>
+                                            <a href="@Url.Action("index", "Articles",
+                                                            new {id=subitem.F_EnCode})" title="@subitem.F_Title">@subitem.F_Title</a>
+                                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="layui-panal-footer">
+                            <dl>
+                                <dt>相关专题</dt>
+                                @{
+                                    foreach (var recommendSpecial in item.RecommendSpecial)
+                                    {
+                                        <dd>
+                                            <a href="#">
+                                                @recommendSpecial.F_Name
+                                            </a>
+                                        </dd>
+                                    }
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                                    }
+        }
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        layui.use(['carousel', 'form'], function () {
+            var carousel = layui.carousel
+            , form = layui.form;
+            //改变下时间间隔、动画类型、高度
+            carousel.render({
+                elem: '#carousel'
+              , interval: 1800
+              , anim: 'fade'
+               , width: '100%'
+            });
+        });
+
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+            , layer = layui.layer;
+
+            var data =@Html.Raw(ViewBag.NewestArticle)
+            //调用分页
+            laypage.render({
+                elem: 'NewestPage'
+              , count: data.length
+                , limit: 26
+                , layout: ['page']
+                , theme: 'NewestPage'
+              , jump: function (obj) {
+                  //模拟渲染
+                  document.getElementById('Newest').innerHTML = function () {
+                      var arr = []
+                      , thisData = data.concat().splice(obj.curr * obj.limit - obj.limit, obj.limit);
+
+                      var Count = thisData.length;
+                      var Line = Math.ceil(Count / 2);
+
+                      layui.each(thisData, function (index, item) {
+                          var Title = item.F_Title;
+                          if (item.F_Ishot == 1) {
+                              Title = "<b class='layui-red'>" + Title + "</b>"
+                          }
+                          if (index == 0) {
+                              arr.push("<div class='layui-col-md6'><div class='layui-panal-content no-padding'><ul>");
+                          }
+                          arr.push('<li><p><a href="' + item.F_Link + '" title="">' + Title + '</a><span>' + timeToDate(parseInt(new Date(item.F_CreatorTime).getTime() / 1000)) + '</span></p></li>')
+                          if (index == Line - 1) {
+                              arr.push("</ul></div></div>");
+                              arr.push("<div class='layui-col-md6'><div class='layui-panal-content no-padding'><ul>");
+                          }
+                          if (index == Count - 1) {
+                              arr.push("</ul></div></div>");
+                          }
+
+                      });
+                      return arr.join('');
+                  }();
+              }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<style type="text/css">
+    form {
+        border: 1px solid #CCC;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        width: 340px;
+        background: #EEE;
+    }
+</style>
+<link href="~/Content/css/framework-font.css" rel="stylesheet" />
+<link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+<script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+<script src="~/Content/js/bootstrap/bootstrap.js"></script>
+<link href="~/Content/js/bootstrap/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jqgrid/jqgrid.min.js"></script>
+<link href="~/Content/js/jqgrid/jqgrid.css" rel="stylesheet" />
+<script src="~/Content/js/jqgrid/grid.locale-cn.js"></script>
+<link href="~/Content/css/framework-ui.css" rel="stylesheet" />
+<script src="~/Content/js/framework-ui.js"></script>
+<script src="@Url.Content("~/Content/js/jquery/jquery-form.js")"></script>
+<script type="text/javascript">
+    var picPath = "";
+    var ControlId = $.request("ControlId");
+    var Path = $.request("Path");
+    $(function () {
+        $("#btn_show").bind("click", function () {
+            $("#form_upload").show();
+            var options = {
+                data: { DicPath: Path },
+                success: function (responseText, statusText, xhr, $form) {
+                    picPath = responseText.pic;
+                    if (picPath == "") {
+                        alert(responseText.error);
+                    }
+                    else {
+                        $("#form_upload").hide();
+                        $("#result").attr("src", picPath).show();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            };
+
+            $("#form_upload").ajaxForm(options);
+        });
+    });
+
+    function submitForm() {
+        top.Form.$("#" + ControlId).val(picPath);
+        $.modalClose();
+    }
+</script>
+
+<input type="button" id="btn_show" value="上传图片" /><br />
+<form id="form_upload" style="padding:20px; display:none;" action="upload" method="post" enctype="multipart/form-data">
+    <input name="upImg" style="width:350px;height:25px;" size="38" type="file" /><input type="submit" value="上传" />
+</form>
+<img alt="" style="display:none;" id="result" src="" />

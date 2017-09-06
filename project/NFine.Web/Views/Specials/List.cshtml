@@ -1,0 +1,28 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+@using NFine.Code;
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_OtherIndex.cshtml";
+    var entity = ViewBag.entity as SpecialEntity;
+}
+<div class="layui-container layui-clear">
+    <div class="layui-row layui-col-space20 layui-Navigation">
+        <div class="layui-col-md8">
+            <div class="layui-Special-list">
+                <div>@entity.F_Name</div>
+                <div class="layui-panal">
+                    <div class="layui-panal-title layui-otherpanal-title"></div>
+                    <div class="layui-panal-content">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+        </div>
+    </div>
+</div>
+
+
+

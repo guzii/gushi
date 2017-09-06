@@ -1,0 +1,281 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+@using NFine.Code;
+@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<ArticleEntity>
+@{
+    Layout = "~/Views/Shared/_OtherIndex.cshtml";
+    var NavigationEntity = ViewBag.NavigationEntity as NavigationEntity;
+    var NavigationList = ViewBag.NavigationList as List<NavigationEntity>;
+    var SpecialList = ViewBag.SpecialList as List<SpecialEntity>;
+    var RecommandArticle = ViewBag.RecommandArticle as List<ArticleEntity>;
+    var RankArticle = ViewBag.RankArticle as List<ArticleEntity>;
+    var RecommandSpecialList = ViewBag.RecommandSpecialList as List<SpecialEntity>;
+
+    ViewBag.Title = NavigationEntity.F_Title + " - " + Common.SEOSiteName();
+    ViewBag.seoKeywords = NavigationEntity.F_Keywords;
+    ViewBag.seoDescription = NavigationEntity.F_Description;
+}
+<div class="layui-container layui-clear">
+    <div class="layui-row layui-col-space20 layui-Navigation">
+        <div class="layui-col-md8">
+            <div class="layui-panal">
+                <div class="layui-panal-title layui-otherpanal-title">
+                    <span>
+                        您现在的位置：
+                        <a href="@Url.Action("Index", "Main")">首页</a><em> ></em>
+                        <a>
+                            @NavigationEntity.F_Name
+                        </a>
+                    </span>
+                </div>
+                <div class="layui-panal-content">
+                    <dl class="ohter-dd">
+                        <dt>
+                            <a href="@Url.Action("index", "Navigation",
+    new { id = NavigationEntity.F_EnCode })">
+                                @NavigationEntity.F_Name
+                            </a>
+                        </dt>
+                        <dd>
+                            @{
+                                foreach (var item in NavigationList)
+                                {
+                            <a href="@Url.Action("index", "Navigation",
+                new { id = item.F_EnCode })">@item.F_Name</a>
+                                }
+
+                            }
+                        </dd>
+                    </dl>
+                    <dl class="ohter-dd Special-dd layui-clear">
+                        <dt>
+                            相关专题
+                        </dt>
+                        <dd>
+                            @{
+                                foreach (var item in SpecialList)
+                                {
+                            <a href="#">
+                                @item.F_Name
+                            </a>
+                                }
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="layui-panal">
+                <div class="layui-panal-title layui-otherpanal-title">
+                </div>
+                <div class="layui-panal-content">
+                    @{
+                        if (NavigationEntity.F_Style == 0)
+                        {
+                            <div class="layui-article">
+                                @{
+                                    if (Model.Count > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <div>
+                                                <h1>
+                                                    <a href="@Url.Action("index", "Articles", 
+                                                            new {id=item.F_EnCode})" target="_blank">@item.F_Title</a>
+                                                    @if (item.F_Isrecommend == true)
+                                                    {
+                                                        <i class="iconfont icon-tuijian"></i>
+                                                    }
+                                                    else if (item.F_Ishot == true)
+                                                    {
+                                                        <i class="iconfont icon-remen"></i>
+                                                    }
+                                                    else if (item.F_IsTop == true)
+                                                    {
+                                                        <i class="iconfont icon-zhiding"></i>
+                                                    }
+                                                </h1>
+                                                <p>
+                                                    <span>
+                                                        <i class="iconfont icon-shijian"></i>
+                                                        @Html.Label(((DateTime)item.F_CreatorTime).ToString("yyyy-MM-dd"))
+                                                    </span>
+                                                    <span>
+                                                        <i class="iconfont icon-liuliang"></i>
+                                                        @item.F_ReadCount.ToString("N0")
+                                                    </span>
+                                                </p>
+                                                @{
+                                                    if (!string.IsNullOrEmpty(item.F_ImgUrl))
+                                                    {
+                                                        <div class="Article-list">
+                                                            <div class="Article-Img">
+                                                                <a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})" target="_blank">
+                                                                    <img src="@item.F_ImgUrl" title="@item.F_Title" />
+                                                                </a>
+                                                            </div>
+                                                            <div class="Article-content">
+                                                                @Html.Raw(item.F_Zhaiyao)
+                                                                <span><a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})" target="_blank">[阅读全文]</a></span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="Article-content">
+                                                            @item.F_Zhaiyao
+                                                            <span><a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})" target="_blank">[阅读全文]</a></span>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                                        }
+                                                    }
+                                }
+                            </div>
+                                                    }
+                                                    else if (NavigationEntity.F_Style == 1)
+                                                    {
+                                                        <div class="layui-article">
+                                                            @{
+                                                                <div class="layui-row layui-col-space10">
+                                                                    @if (Model.Count > 0)
+                                                                    {
+                                                                        foreach (var item in Model)
+                                                                        {
+                                                                            <div class="layui-col-md4">
+                                                                                <div>
+                                                                                    <a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})">
+                                                                                        <img src="@item.F_ImgUrl" />
+                                                                                    </a>
+                                                                                    <h2>
+                                                                                        <a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})" title="@item.F_Title">@item.F_Title</a>
+                                                                                    </h2>
+                                                                                    <p title="@Html.Raw(item.F_Zhaiyao)">
+                                                                                        @Html.Raw(item.F_Zhaiyao)
+                                                                                    </p>
+                                                                                    <div class="layui-info">
+                                                                                        <span>
+                                                                                            <i class="iconfont icon-shijian"></i>
+                                                                                            @Html.Label(((DateTime)item.F_CreatorTime).ToString("MM-dd"))
+                                                                                        </span>
+                                                                                        <span>
+                                                                                            <i class="iconfont icon-liuliang"></i>
+                                                                                            @item.F_ReadCount.ToString("N0")
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                                }
+                                                                else if (NavigationEntity.F_Style == 2)
+                                                                {
+                                                                    <div class="layui-article">
+                                                                        @{
+                                                                            if (Model.Count > 0)
+                                                                            {
+                                                                                foreach (var item in Model)
+                                                                                {
+                                                                                    <div>
+                                                                                        <h1>
+                                                                                            <a href="@Url.Action("index", "Articles", new {id=item.F_EnCode})" target="_blank">@Html.Raw(item.F_Title)</a>
+                                                                                            @if (item.F_Isrecommend == true)
+                                                                                            {
+                                                                                                <i class="iconfont icon-tuijian"></i>
+                                                                                            }
+                                                                                            else if (item.F_Ishot == true)
+                                                                                            {
+                                                                                                <i class="iconfont icon-remen"></i>
+                                                                                            }
+                                                                                            else if (item.F_IsTop == true)
+                                                                                            {
+                                                                                                <i class="iconfont icon-zhiding"></i>
+                                                                                            }
+                                                                                        </h1>
+                                                                                        <p>
+                                                                                            <span>
+                                                                                                <i class="iconfont icon-shijian"></i>
+                                                                                                @Html.Label(((DateTime)item.F_CreatorTime).ToString("yyyy-MM-dd"))
+                                                                                            </span>
+                                                                                            <span>
+                                                                                                <i class="iconfont icon-liuliang"></i>
+                                                                                                @item.F_ReadCount.ToString("N0")
+                                                                                            </span>
+                                                                                        </p>
+                                                                                        @{
+                                                                                            <div class="Article-content">
+                                                                                                @Html.Raw(item.F_Content)
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                                }
+                                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                                            }
+
+                    }
+
+                </div>
+                <div class="paginator">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", "Navigation", new { id = NavigationEntity.F_EnCode, pageIndex = page }))
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-panal">
+                <div class="layui-panal-title  layui-otherpanal-title">
+                    <span>@NavigationEntity.F_Name<span>栏目简要</span></span>
+                </div>
+                <div class="layui-panal-content">
+                    <div class="layui-abstract">
+                        @NavigationEntity.F_Description
+                    </div>
+                </div>
+            </div>
+           
+            @{
+                Html.RenderAction("AboutRecommend", "Partial", new { NavId = NavigationEntity.F_EnCode });
+            }
+
+            <div class="layui-panal">
+                <div class="layui-panal-title  layui-otherpanal-title">
+                    <span><span>@NavigationEntity.F_Name</span>相关专题</span>
+                </div>
+                <div class="layui-panal-content">
+                    <div class="layui-Special">
+                        @{
+                            foreach (var item in RecommandSpecialList)
+                            {
+                        <a href="#" target="_blank">@item.F_Name</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".Article-content").each(function (index, element) {
+                if ($(this).height() > 300) {
+                    $(this).css("height", "200px");
+                    $(this).css("overflow", "hidden");
+                    $(this).after("<p class='layui-zhankai'>展开全部</p>");
+                }
+            });
+            $(".layui-zhankai").on("click", function () {
+                $(this).prev().css("height", "auto");
+                $(this).remove();
+            });
+        });
+
+    </script>
+}

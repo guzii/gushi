@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Special";
+    Layout = "~/Areas/MasterManage/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    $(function () {
+        $("#Tree").treeview({
+            showcheck: true,
+            url: "/ArticleManage/Special/GetListGridTree",
+            param: { NavigationId: NavigationId }
+        });
+    })
+    var NavigationId = $.request("NavigationId");
+
+    function submitForm() {
+        var ids = String($("#Tree").getCheckedNodes());
+        if (ids != "") {
+            $.submitForm({
+                url: "/ArticleManage/Special/SubmitNavigationForm?NavigationId=" + NavigationId,
+                param: { SpecialIds: ids },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+    }
+
+</script>
+<div class="gridPanel">
+    <div id="Tree"></div>
+</div>

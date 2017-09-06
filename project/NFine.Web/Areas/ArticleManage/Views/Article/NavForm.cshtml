@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Areas/MasterManage/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/ArticleManage/Article/GetNavFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    function initControl() {
+        $("#F_ParentId").bindSelect({
+            url: "/ArticleManage/Article/GetNavTreeSelectJson"
+        });
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/ArticleManage/Article/SubmitNavForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                top.Navigation.$("#gridList").resetSelection();
+                top.Navigation.$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_uploadImg() {
+        $.modalOpen({
+            id: "UploadImg",
+            title: "上传图片",
+            url: "/Partial/ImgForm?ControlId=F_NavImg&Path=HomePage",
+            width: "400px",
+            height: "250px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+</script>
+
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">上级</th>
+                <td class="formValue">
+                    <select id="F_ParentId" name="F_ParentId" class="form-control required">
+                        <option value="0">父节点</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">名称</th>
+                <td class="formValue">
+                    <input id="F_Name" name="F_Name" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">导航名称</th>
+                <td class="formValue">
+                    <input id="F_NavName" name="F_NavName" type="text" class="form-control required" placeholder="请输入导航名称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">封面图片</th>
+                <td class="formValue">
+                    <div class="input-group">
+                        <input id="F_NavImg" name="F_NavImg" type="text" class="form-control" placeholder="首页推荐根节点需要上传图片" />
+                        <span class="input-group-btn" onclick="btn_uploadImg()">
+                            <a class="btn btn-primary"><i class="fa fa-ellipsis-h"></i></a>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">展示形式</th>
+                <td class="formValue">
+                    <select id="F_Style" name="F_Style" class="form-control required">
+                        <option value="-1">不需要展示</option>
+                        <option value="0">文章列表</option>
+                        <option value="1">图片形式</option>
+                        <option value="2">短文展示</option>
+                        <option value="3">分类展示</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">编号</th>
+                <td class="formValue">
+                    <input id="F_EnCode" name="F_EnCode" type="text" class="form-control required" placeholder="请输入编号，具有唯一性" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序</th>
+                <td class="formValue">
+                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" value="99" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">选项</th>
+                <td class="formValue" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="F_IsNav" name="F_IsNav" type="checkbox"><label for="F_IsNav">是否首页导航</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_IsRecommend" name="F_IsRecommend" type="checkbox"><label for="F_IsRecommend">是否首页推荐</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_IsHeader" name="F_IsHeader" type="checkbox"><label for="F_IsHeader">是否头部导航</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">关键词</th>
+                <td class="formValue">
+                    <input id="F_Keywords" name="F_Keywords" type="text" class="form-control" placeholder="请输入关键字，多个用 , 隔开" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" valign="top" style="padding-top: 5px;">
+                    描述
+                </th>
+                <td class="formValue">
+                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    var SpId = $.request("SpId");
+    $(function () {
+        $('#layout').layout();
+        treeView();
+        gridList();
+    });
+
+    function treeView() {
+        $("#itemTree").treeview({
+            url: "/ArticleManage/Article/GetNavTreeJson",
+            onnodeclick: function (item) {
+                $("#txt_keyword").val('');
+                $('#btn_search').trigger("click");
+            }
+        });
+    }
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/ArticleManage/Article/GetListGridJson?SpId=" + SpId,
+            height: $(window).height() - 128,
+            multiselect: true,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '标题', name: 'F_Title', width: 300, align: 'left' },
+                { label: '标签', name: 'F_Tags', width: 120, align: 'center' },
+                { label: '阅读量', name: 'F_ReadCount', width: 80, align: 'center' },
+                { label: '点赞', name: 'F_LikeCount', width: 80, align: 'center' },
+                { label: '吐槽', name: 'F_HateCount', width: 80, align: 'center' },
+                { label: '排序', name: 'F_SortCode', width: 80, align: 'center' },
+                {
+                    label: "发布", name: "F_EnabledMark", width: 80, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+            ],
+            pager: "#gridPager",
+            sortname: 'F_SortCode asc,F_CreatorTime desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            var navId = "";
+            if ($("#itemTree").getCurrentNode() != undefined) {
+                navId = $("#itemTree").getCurrentNode().id;
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { navId: navId, keywords: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+        });
+    }
+
+    function submitForm() {
+        var ids = $('#gridList').jqGrid('getGridParam', 'selarrrow');
+        if (ids != "") {
+            $.submitForm({
+                url: "/ArticleManage/Special/SubmitArticleForm?SpId=" + SpId,
+                param: { ArticleIds: ids.join(',') },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+        //$.modalClose();
+    }
+
+</script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div id="itemTree"></div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="topPanel">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="名称/编号" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>

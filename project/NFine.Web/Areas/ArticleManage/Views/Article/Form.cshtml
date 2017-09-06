@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "Info";
+    Layout = "~/Areas/MasterManage/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/js/ueditor/ueditor.config.js"></script>
+<script src="~/Content/js/ueditor/ueditor.all.min.js"></script>
+<script src="~/Content/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="~/Content/js/dateFmt/moment.js"></script>
+
+<style type="text/css">
+    .wrapper {
+        border-bottom: none;
+    }
+</style>
+<script>
+    var ue = UE.getEditor('F_Content');
+    var NavId = $.request("NavId");
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/ArticleManage/Article/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    ue.setContent(data.F_Content)
+                }
+            });
+        }
+    });
+    function initControl() {
+        $("#F_NavID").bindSelect({
+            url: "/ArticleManage/Article/GetNavTreeSelectJson"
+        });
+        if (!!NavId) {
+            $("#F_NavID").val(NavId).trigger("change");
+        }
+        $("#F_EnCode").val(moment().format('YYYYMMDDHHmmssSSS'));
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        postData["F_Content"] = ue.getContent();
+        $.submitForm({
+            url: "/ArticleManage/Article/SubmitForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    //标签
+    function btn_tags() {
+        var TagIds = $("#hiddenTagsId").val();
+        $.modalOpen({
+            id: "Tags",
+            title: "选择标签",
+            url: "/ArticleManage/Tags/index?TagIds=" + TagIds,
+            width: "800px",
+            height: "550px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+
+    function btn_uploadImg() {
+        $.modalOpen({
+            id: "UploadImg",
+            title: "上传图片",
+            url: "/Partial/ImgForm?ControlId=F_ImgUrl&Path=ArticlePath",
+            width: "400px",
+            height: "250px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+</script>
+<form id="form1">
+    <div class="wrapper">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
+            <li><a href="#b" data-toggle="tab">详情描述</a></li>
+            <li><a href="#c" data-toggle="tab">SEO设置</a></li>
+        </ul>
+        <div class="tab-content" style="padding-top: 5px;">
+            <div id="a" class="tab-pane active" style="padding: 15px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">所属类别</th>
+                        <td class="formValue">
+                            <select id="F_NavID" name="F_NavID" class="form-control required">
+                                <option value="">请选择</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">内容标题</th>
+                        <td class="formValue">
+                            <div class="input-group">
+                                <input id="F_Title" name="F_Title" type="text" class="form-control required" placeholder="请输入名称" />
+                                <span class="input-group-btn">
+                                    <a class="btn  btn-primary"><i class="fa fa-th-large"></i></a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle">Tags标签</th>
+                        <td class="formValue">
+                            <div class="input-group">
+                                <input id="hiddenTagsId" type="hidden" />
+                                <input id="F_Tags" name="F_Tags" type="text" class="form-control" placeholder="多个Tags标签用 , 隔开" />
+                                <span class="input-group-btn" onclick="btn_tags()">
+                                    <a class="btn btn-primary"><i class="fa fa-tags"></i></a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">封面图片</th>
+                        <td class="formValue">
+                            <div class="input-group">
+                                <input id="F_ImgUrl" name="F_ImgUrl" type="text" class="form-control" />
+                                <span class="input-group-btn" onclick="btn_uploadImg()">
+                                    <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" style="height: 35px;">选项</th>
+                        <td class="formValue" style="padding-top: 1px;">
+                            <div class="ckbox">
+                                <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">是否发布</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_SaveStyle" name="F_SaveStyle" type="checkbox" ><label for="F_SaveStyle">数据存储</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_Ismsg" name="F_Ismsg" type="checkbox" checked="checked"><label for="F_Ismsg">是否开启评论</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_Ishot" name="F_Ishot" type="checkbox"><label for="F_Ishot">热门</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_Isrecommend" name="F_Isrecommend" type="checkbox"><label for="F_Isrecommend">推荐</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_IsTop" name="F_IsTop" type="checkbox"><label for="F_IsTop">置顶</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">排序</th>
+                        <td class="formValue">
+                            <input id="F_SortCode" name="F_SortCode" type="number" min="0" class="form-control required" value="99" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">点赞次数</th>
+                        <td class="formValue">
+                            <input id="F_LikeCount" name="F_LikeCount" type="number" min="0" class="form-control required" value="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">吐槽次数</th>
+                        <td class="formValue">
+                            <input id="F_HateCount" name="F_HateCount" type="number" min="0" class="form-control required" value="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">浏览次数</th>
+                        <td class="formValue">
+                            <input id="F_ReadCount" name="F_ReadCount" type="number" min="0" class="form-control required" value="0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">发布时间</th>
+                        <td class="formValue">
+                            <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="b" class="tab-pane" style="padding: 15px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">编号</th>
+                        <td class="formValue">
+                            <input id="F_EnCode" name="F_EnCode" type="text" class="form-control" placeholder="请输入编号，具有唯一性" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">URL链接</th>
+                        <td class="formValue">
+                            <input id="F_Link" name="F_Link" type="text" class="form-control" placeholder="设置URL链接将进行页面跳转" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">文章作者</th>
+                        <td class="formValue">
+                            <input id="F_Aothor" name="F_Aothor" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">文章摘要</th>
+                        <td class="formValue">
+                            <textarea id="F_Zhaiyao" name="F_Zhaiyao" class="form-control" rows="2"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">文章内容</th>
+                        <td class="formValue">
+                            <script id="F_Content" type="text/plain" style="width:100%;height:300px;">
+                            </script>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="c" class="tab-pane" style="padding-right: 15px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">SEO标题</th>
+                        <td class="formValue">
+                            <input id="F_SEOTitle" name="F_SEOTitle" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">SEO关键词</th>
+                        <td class="formValue">
+                            <input id="F_SEOKeywords" name="F_SEOKeywords" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">
+                            SEO描述
+                        </th>
+                        <td class="formValue">
+                            <textarea id="F_SEOdescription" name="F_SEOdescription" class="form-control" style="height: 60px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>

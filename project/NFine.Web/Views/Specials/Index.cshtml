@@ -1,0 +1,44 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+@using NFine.Code;
+@model  List<SpecialEntity>
+@{
+    ViewBag.Title = "专题列表" + " - " + Common.SEOSiteName();
+    Layout = "~/Views/Shared/_OtherIndex.cshtml";
+}
+<div class="layui-container layui-clear layui-Special">
+    <div>
+        <div>专题列表</div>
+        @{
+            foreach (var item in Model)
+            {
+                <div class="layui-Special-header-title">@item.F_Name</div>
+                <div class="layui-row layui-col-space10 ">
+                    @{
+                        foreach (var subitem in item.subList)
+                        {
+                            <div class="layui-col-md6">
+                                <div class="layui-row layui-col-space10">
+                                    <div class="layui-col-md2">@subitem.F_Name</div>
+                                    <div class="layui-col-md10">
+
+                                        <span class="layui-breadcrumb" lay-separator="|">
+                                            @{
+                                                foreach (var subchilditem in subitem.subList)
+                                                {
+                                                    <a href="@Url.Action("List", "Specials",
+                                                            new { id = subchilditem.F_EnCode })">@subchilditem.F_Name</a>
+                                                }
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                                                }
+                    }
+
+                </div>
+                                                }
+        }
+
+    </div>
+</div>

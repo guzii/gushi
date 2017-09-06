@@ -1,0 +1,54 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+@{
+    var NavigationEntity = ViewBag.NavigationEntity as NavigationEntity;
+    var RecommandArticle = ViewBag.RecommandArticle as List<ArticleEntity>;
+    var RankArticle = ViewBag.RankArticle as List<ArticleEntity>;
+}
+<div class="layui-panal">
+    <div class="layui-panal-title  layui-otherpanal-title">
+        <span>网友推荐<span>@NavigationEntity.F_Name</span></span>
+    </div>
+    <div class="layui-panal-content">
+        <ul class="layui-ul">
+            @{
+                foreach (var item in RecommandArticle)
+                {
+                    var classHot = "";
+                    if (item.F_Ishot == true) { classHot = "layui-red"; }
+                    <li>
+                        <a title="@item.F_Title" class="@classHot"
+                           href="@Url.Action("index", "Articles",new {id=item.F_EnCode})">@item.F_Title</a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+<div class="layui-panal">
+    <div class="layui-panal-title  layui-otherpanal-title">
+        <span><span>@NavigationEntity.F_Name</span>排行榜</span>
+    </div>
+    <div class="layui-panal-content">
+        <ul class="hotUl">
+            @{
+                var Num = 1;
+                foreach (var item in RankArticle)
+                {
+                    var classHot = "";
+                    if (item.F_Ishot == true) { classHot = "layui-red"; }
+                    <li>
+                        <em>@Num</em>
+                        <a title="@item.F_Title" class="@classHot"
+                           href="@Url.Action("index", "Articles",new {id=item.F_EnCode})">@item.F_Title</a>
+                        <b>
+                            <i class="iconfont icon-liuliang"></i>
+                            <span>@item.F_ReadCount.ToString("N0")</span>
+                        </b>
+                    </li>
+                    Num++;
+                }
+            }
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,294 @@
+﻿.Navigation .cell > a {
+    white-space: nowrap;
+}
+
+.Navigation .cell:nth-child(2n+1) {
+    text-align: center;
+}
+
+    .Navigation .cell:nth-child(2n+1) i {
+        font-size: 42px;
+    }
+
+.Navigation .cell:nth-child(2n) a {
+    margin-right: 10px;
+    line-height: 23px;
+}
+
+.ONavigation {
+    margin: .2rem 0;
+}
+
+    .ONavigation .cell > a {
+        color: white;
+        display: inline-block;
+        padding: 0px 5px 0px 4px;
+        border-right: 1px solid white;
+        line-height: 1rem;
+        margin: 2px 0px;
+        font-size: .75rem;
+    }
+
+.Navigation-Header-Nav {
+    border-bottom: 2px solid #1ba1e2;
+    font-size: .75rem;
+    padding-bottom: 5px;
+    margin-top: 10px;
+}
+
+    .Navigation-Header-Nav span > em {
+        font-style: inherit;
+        padding: 0px 3px;
+    }
+
+.Navigation-content {
+}
+
+    .Navigation-content .Navigation-Left-Header {
+        width: 100%;
+        height: 74px;
+        overflow: hidden;
+    }
+
+        .Navigation-content .Navigation-Left-Header > dl {
+            margin: 0;
+            padding: 0;
+        }
+
+        .Navigation-content .Navigation-Left-Header dt {
+            font-size: 14px;
+            height: 74px;
+            width: 110px;
+            float: left;
+            overflow: hidden;
+            text-align: center;
+            line-height: 74px;
+            background: #0093dd;
+            margin-right: 10px;
+        }
+
+            .Navigation-content .Navigation-Left-Header dt a > h1 {
+                font-size: 14px;
+                height: 74px;
+                width: 110px;
+                float: left;
+                overflow: hidden;
+                text-align: center;
+                line-height: 74px;
+                font-weight: normal;
+                margin: 0;
+                padding: 0;
+                color: white;
+                font-size: .75rem;
+                font-weight: bold;
+            }
+
+        .Navigation-content .Navigation-Left-Header dd a {
+            display: block;
+            float: left;
+            height: 20px;
+            margin-top: 12px;
+            padding: 0 20px;
+            border-right: 2px solid #0093dd;
+            text-align: center;
+            font-size: .75rem;
+        }
+
+    .Navigation-content .Navigation-Left-Special {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        overflow: hidden;
+        background: #EAF3FF;
+    }
+
+    .Navigation-content .Navigation-Left-Special {
+        margin-top: 15px;
+    }
+
+        .Navigation-content .Navigation-Left-Special dl {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            overflow: hidden;
+            background: #EAF3FF;
+            margin: 0;
+            padding: 0;
+            font-size: .75rem;
+        }
+
+        .Navigation-content .Navigation-Left-Special dt {
+            float: left;
+            padding: 0 10px;
+            height: 40px;
+            line-height: 40px;
+            color: #0093dd;
+        }
+
+        .Navigation-content .Navigation-Left-Special dd {
+            float: left;
+            padding-right: 10px;
+            height: 40px;
+            line-height: 40px;
+            margin-left: 0;
+        }
+
+.Navigation-Left-Plan {
+    margin: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+    clear: both;
+    display: inline-block;
+}
+
+    .Navigation-Left-Plan:hover > h1 {
+        color: #0093dd;
+    }
+
+    .Navigation-Left-Plan > h1 {
+        font-size: 1rem;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 5px;
+    }
+
+        .Navigation-Left-Plan > h1 a {
+            color: inherit;
+        }
+
+        .Navigation-Left-Plan > h1 > span {
+            display: inline-block;
+            padding: 5px 5px;
+            background-color: #0093dd;
+            border-radius: 3px;
+            font-size: .5rem;
+            vertical-align: middle;
+            color: white;
+        }
+
+    .Navigation-Left-Plan > p {
+        font-size: .75rem;
+        margin: 0;
+        padding: 5px 0px;
+        overflow: hidden;
+        color: #ccc;
+    }
+
+        .Navigation-Left-Plan > p span {
+            margin-right: 20px;
+        }
+
+    .Navigation-Left-Plan .Article-content {
+        font-size: .8rem;
+        line-height: 1.2rem;
+        text-indent: 1.6rem;
+        color: #666;
+        margin: 5px 0px;
+    }
+
+    .Navigation-Left-Plan .Article-Img {
+        float: left;
+        margin-right: 10px;
+    }
+
+        .Navigation-Left-Plan .Article-Img img {
+            width: 190px;
+            height: 108px;
+            margin: 5px 0px;
+        }
+
+
+.Navigation-content .Navigation-Right-Zhaiyao h3 {
+    margin: 10px 0px 0px;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #0093dd;
+    line-height: 1.5rem;
+}
+
+    .Navigation-content .Navigation-Right-Zhaiyao h3 .mif-layers {
+        font-size: 1.5rem;
+        vertical-align: middle;
+    }
+
+.Navigation-content .Navigation-Right-Zhaiyao > div {
+    font-size: .75rem;
+    line-height: 1rem;
+    text-indent: 1.5rem;
+    color: #666;
+    padding: 5px 10px;
+}
+
+.Navigation-content .Navigation-Right-Recommand h3 {
+    margin: 10px 0px 0px;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #0093dd;
+    line-height: 1.5rem;
+    padding: 5px 0px;
+    border-top: 2px solid #1ba1e2;
+    vertical-align: middle;
+}
+
+    .Navigation-content .Navigation-Right-Recommand h3 > span:first-child {
+        font-size: 1.5rem;
+        vertical-align: sub;
+    }
+
+.Navigation-content .Navigation-Right-Recommand ul {
+    list-style: none;
+    margin: 5px 10px;
+    padding: 0;
+    font-size: .75rem;
+}
+
+    .Navigation-content .Navigation-Right-Recommand ul a {
+        color: inherit;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+        margin-left: 5px;
+    }
+
+        .Navigation-content .Navigation-Right-Recommand ul a:hover {
+            color: #0093dd;
+        }
+
+        .Navigation-content .Navigation-Right-Recommand ul a > span {
+            margin-right: 10px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            background: #0093dd;
+            color: white;
+            font-size: .5rem;
+            line-height: 20px;
+            border-radius: 2px;
+        }
+
+.Navigation-content .Navigation-Right-Recommand .Navigation-Right-Special {
+    margin: 5px 10px;
+}
+
+
+    .Navigation-content .Navigation-Right-Recommand .Navigation-Right-Special a {
+        padding: 3px 5px;
+        border: 1px solid #0093dd;
+        margin: 5px 5px;
+        font-size: .75rem;
+        line-height: 1rem;
+        white-space: nowrap;
+        float: left;
+        color: #666;
+        border-radius:2px;
+    }
+
+        .Navigation-content .Navigation-Right-Recommand .Navigation-Right-Special a:hover {
+            background-color: #0093dd;
+            color: white;
+        }

@@ -1,0 +1,159 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+@using NFine.Code;
+@using PagedList;
+@using PagedList.Mvc;
+@model ArticleEntity
+@{
+    ViewBag.Title = Model.F_SEOTitle + " - " + Common.SEOSiteName();
+    ViewBag.seoKeywords = Model.F_SEOKeywords;
+    ViewBag.seoDescription = Model.F_SEOdescription;
+    var Isrecommend = ViewBag.Isrecommend as List<ArticleEntity>;
+    Layout = "~/Views/Shared/_OtherIndex.cshtml";
+}
+
+<div class="layui-container layui-clear">
+    <div class="layui-row layui-col-space20  layui-article-detail ">
+        <div class="layui-col-md8">
+            <div class="layui-panal">
+                <div class="layui-panal-title-Header ">
+                    <span>
+                        您现在的位置：
+                        <a href="@Url.Action("Index", "Main")">首页</a><em> ></em>
+                        <a href="@Url.Action("index", "Navigation",
+new { id = Model.NavEntity.F_EnCode })">
+                            >
+                            @Model.NavEntity.F_Title
+                        </a>
+                    </span>
+                </div>
+                <div class="layui-panal-content">
+                    <h1>
+                        @Model.F_Title
+                    </h1>
+                    <p class="layui-info">
+                        <span>
+                            <i class="iconfont icon-zuozhe"></i>
+                            @{
+                                if (!string.IsNullOrEmpty(Model.F_Aothor))
+                                {
+                                    @Model.F_Aothor
+                                }
+                                else
+                                {
+                                    @Common.SEOSiteName()
+                                }
+                            }
+                        </span>
+                        <span>
+                            <i class="iconfont icon-shijian"></i>
+                            @Html.Label(((DateTime)Model.F_CreatorTime).ToString("yyyy-MM-dd"))
+                        </span>
+                        <span>
+                            <i class="iconfont icon-liuliang"></i>
+                            @Model.F_ReadCount.ToString("N0")
+                        </span>
+                    </p>
+                    <div class="layui-article-detail-content">
+                        <div id="showContent">
+                            @Html.Raw(Model.F_Content)
+                        </div>
+                        <div id="articlePages"></div>
+                    </div>
+                </div>
+                <div class="paginator">
+                    <div class="pagination">
+                        <ul>
+                            @{
+                                var contentList = ViewBag.contentList as IPagedList<string>;
+                                if (contentList.PageCount > 1)
+                                {
+                                    if (!contentList.IsFirstPage)
+                                    {
+                                        <li class="PagedList-skipToPrevious">
+                                            <a href="@Url.Action("index", "Articles",
+            new { id = Model.F_EnCode, pageIndex = contentList.PageNumber - 1 })">上一页</a>
+                                        </li>
+                                    }
+                                    var count = contentList.PageCount > 9 ? 9 : contentList.PageCount;
+                                    if (contentList.PageNumber > 6)
+                                    {
+                                        <li class="disabled PagedList-ellipses"><a>…</a></li>
+                                        count = contentList.PageNumber + 4 > contentList.PageCount ?
+                                            contentList.PageCount : contentList.PageNumber + 4;
+                                    }
+                                    int page = 9 - (contentList.PageCount - contentList.PageNumber);
+                                    page = page > 0 ? page : 4;
+                                    int firstPage = contentList.PageNumber > 6 ?
+                                        contentList.PageNumber - page : 1;
+
+                                    for (int i = firstPage; i <= count; i++)
+                                    {
+                                        if (i == contentList.PageNumber)
+                                        {
+                                            <li class="active">
+                                                <a href="@Url.Action("index", "Articles",
+                new { id = Model.F_EnCode, pageIndex = i })">@i</a>
+            </li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="@Url.Action("index", "Articles", new { id = Model.F_EnCode, pageIndex = i })">@i</a></li>
+                                        }
+                                    }
+                                    if (contentList.PageCount > count)
+                                    {
+                                        <li class="disabled PagedList-ellipses"><a>...</a></li>
+                                    }
+                                    if (!contentList.IsLastPage)
+                                    {
+                                        <li class="PagedList-skipToNext">
+                                            <a href="@Url.Action("index", "Articles",
+            new { id = Model.F_EnCode, pageIndex = contentList.PageNumber + 1 })">下一页</a>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            @{
+                Html.RenderAction("AboutRecommend", "Partial", new { NavId = Model.NavEntity.F_EnCode });
+            }
+            <div class="layui-panal">
+                <div class="layui-panal-title  layui-otherpanal-title">
+                    <span>精华推荐</span>
+                </div>
+                <div class="layui-panal-content">
+                    <div class="layui-Special layui-Essence">
+                        @{
+                            foreach (var item in Isrecommend)
+                            {
+                                <a href="@Url.Action("index", "Articles",
+            new { id = item.F_EnCode })">
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md4">
+                                            <img src="@item.F_ImgUrl" title="@item.F_Title" />
+                                        </div>
+                                        <div class="layui-col-md8">
+                                            @item.F_Title
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/js/ueditor/ueditor.all.min.js"></script>
+
+}

@@ -1,0 +1,42 @@
+﻿.paginator {
+    margin: 0 10px 20px 10px;
+    clear: both;
+    display: inline-block;
+    text-align: center;
+    width:100%;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.paginator ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+    .paginator ul li {
+        float: left;
+        border: 1px solid #d9d9d9;
+        margin: 3px;
+    }
+
+        .paginator ul li a {
+            padding: 3px 10px;
+            display: inline-block;
+        }
+
+        .paginator ul li:hover {
+            border: 1px solid #0094ff;
+        }
+
+        .paginator ul li.active {
+            background-color: #0094ff;
+            border: 1px solid #0094ff;
+        }
+
+            .paginator ul li.active a {
+                color: white;
+            }

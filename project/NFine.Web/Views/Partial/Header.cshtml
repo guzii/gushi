@@ -1,0 +1,66 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+<div class="layui-header header header-index">
+    <div class="layui-main">
+        <a class="logo" href="/">
+            <img src="//img.ithome.com/images/v2.3/ithome.logo.png" alt="layui">
+        </a>
+        <div class="layui-form component">
+            <div class="layui-select-title">
+                <input type="text" placeholder="搜索组件或模块" value="" class="layui-input">
+                <input type="button" class="layui-input layui-btn layui-button" value="搜索" />
+            </div>
+        </div>
+        <ul class="layui-nav" lay-filter="">
+            <li class="layui-nav-item">
+                <a href="@Url.Action("index","Specials")">专题</a>
+            </li>
+            <li class="layui-nav-item"><a href="">订阅</a></li>
+            <li class="layui-nav-item"><a href="">投稿</a></li>
+            <li class="layui-nav-item"><a href="">地图</a></li>
+        </ul>
+    </div>
+</div>
+
+<header class="headerNav">
+    <div class="layui-container ">
+        <div class="layui-row  layui-bg-white">
+            <div class="layui-col-xs7 layui-col-sm7 layui-col-md8">
+                <div class="layui-row">
+                    <div class="layui-col-md1">
+                        <i class="iconfont icon-gushi"></i>
+                    </div>
+                    <div class="layui-col-md11">
+                        <span class="layui-breadcrumb" lay-separator="|">
+                            @{
+                                var NavGushi = ViewBag.Navgushi as List<NavigationEntity>;
+                                foreach (var item in NavGushi)
+                                {
+                                    <a href="@Url.Action("index", "Navigation", new {id=item.F_EnCode})" class="fg-white">@item.F_NavName</a>
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-col-xs5 layui-col-sm5 layui-col-md4">
+                <div class="layui-row">
+                    <div class="layui-col-md2">
+                        <i class="iconfont icon-wenxue"></i>
+                    </div>
+                    <div class="layui-col-md10">
+                        <span class="layui-breadcrumb" lay-separator="|">
+                            @{
+                                var NavWenxue = ViewBag.Navwenxue as List<NavigationEntity>;
+                                foreach (var item in NavWenxue)
+                                {
+                                    <a href="@Url.Action("index", "Navigation", new { id=item.F_EnCode})" class="fg-white">@item.F_NavName</a>
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

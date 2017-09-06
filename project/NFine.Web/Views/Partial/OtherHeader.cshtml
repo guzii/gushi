@@ -1,0 +1,51 @@
+﻿@using NFine.Domain.Entity.SystemManage;
+<div class="otherheader-index">
+    <div class="layui-main">
+        <span class="layui-breadcrumb" lay-separator="|">
+            <a href="@Url.Action("Index", "Main")">首页</a>
+            @{
+                foreach (var item in ViewBag.OtherNav as List<NavigationEntity>)
+                {
+                    <a href="@Url.Action("index", "Navigation", new { id=item.F_EnCode})">@item.F_NavName</a>
+                }
+            }
+        </span>
+        <div class="layui-layout-right">
+            <span class="layui-breadcrumb" lay-separator="|">
+                <a href="#">登录</a>
+                <a href="@Url.Action("index","Specials")">专题</a>
+                <a href="#">地图</a>
+            </span>
+        </div>
+    </div>
+</div>
+<header class="headerNav">
+    <div class="layui-container ">
+        <div class="layui-row  layui-bg-white">
+            <div class="layui-col-xs2 layui-col-sm2 layui-col-md2">
+                <a class="otherlogo" href="/">
+                    <img src="//img.ithome.com/images/v2.3/ithome.logo.png" alt="layui">
+                </a>
+            </div>
+            <div class="layui-col-xs7 layui-col-sm7 layui-col-md7">
+                @{
+                    var PartentNav = ViewBag.PartentNav as List<NavigationEntity>;
+                    <span class="layui-breadcrumb other-breadcrumb" lay-separator=" ">
+                        @foreach (var item in PartentNav)
+                        {
+                            <a href="@Url.Action("index", "Navigation", new {id=item.F_EnCode})">@item.F_Name</a>
+                        }
+                    </span>
+                }
+            </div>
+            <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
+                <div class="layui-form other-component component">
+                    <div class="layui-select-title">
+                        <input type="text" placeholder="输入关键字进行搜索" value="" class="layui-input">
+                        <input type="button" class="layui-input layui-btn layui-button" value="搜索" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>   
